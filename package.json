@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "lint:fix": "eslint --fix '**/*.{js,ts}'; prettier --write '**/*.{js,ts,md}'"
+    "build": "tsc",
+    "lint:fix": "eslint --fix '**/*.{js,ts}'; prettier --write '**/*.{js,ts,md}'",
+    "watch": "tsc -w"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.6.1",
