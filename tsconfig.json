@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "module": "system",
+    "module": "None",
     "removeComments": true,
     "preserveConstEnums": true,
     "rootDir": "src",
     "outDir": "contents/code",
-    "sourceMap": false
+    "sourceMap": false,
+    "strict": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

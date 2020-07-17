@@ -1,3 +1,4 @@
+"use strict";
 function newSlotPosition(workspace, client, numberXslots, numberYslots, x, y, xSlotToFill, ySlotToFill) {
     var maxArea = workspace.clientArea(KWin.MaximizeArea, client);
     var width = x == numberXslots

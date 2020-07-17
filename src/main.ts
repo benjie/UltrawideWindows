@@ -1,4 +1,143 @@
-type Workspace = any;
+/* Types taken from https://github.com/Jazqa/kwin-quarter-tiling/blob/master/src/; GPL license */
+
+interface VoidSignal {
+  connect: (cb: () => void) => void;
+  disconnect: (cb: () => void) => void;
+}
+
+interface ClientSignal {
+  connect: (cb: (client: Client) => void) => void;
+  disconnect: (cb: (client: Client) => void) => void;
+}
+
+interface Geometry {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+type Direction = "top" | "left" | "bottom" | "right";
+
+interface Client {
+  readonly windowId: string;
+
+  desktop: number;
+  readonly screen: number;
+  geometry: Geometry;
+  readonly activities: Array<string>;
+
+  readonly caption: string;
+  readonly resourceClass: string;
+  readonly resourceName: string;
+
+  readonly comboBox: boolean;
+  readonly desktopWindow: boolean;
+  readonly dialog: boolean;
+  readonly dndIcon: boolean;
+  readonly dock: boolean;
+  readonly dropdownMenu: boolean;
+  readonly menu: boolean;
+  readonly minimized: boolean;
+  readonly notification: boolean;
+  readonly popupMenu: boolean;
+  readonly specialWindow: boolean;
+  readonly splash: boolean;
+  readonly toolbar: boolean;
+  readonly tooltip: boolean;
+  readonly utility: boolean;
+  readonly transient: boolean;
+  readonly shade: boolean;
+  readonly moveable: boolean;
+  readonly width: number;
+  readonly height: number;
+
+  clientStartUserMovedResized: ClientSignal;
+  clientFinishUserMovedResized: ClientSignal;
+
+  screenChanged: VoidSignal;
+  desktopChanged: VoidSignal;
+  shadeChanged: VoidSignal;
+}
+
+interface Options {
+  windowSnapZone: number;
+  electricBorderMaximize: boolean;
+  electricBorderTiling: boolean;
+}
+
+interface ClientFullScreenSignal {
+  connect: (cb: (client: Client, fs: boolean) => void) => void;
+  disconnect: (cb: (client: Client, fs: boolean) => void) => void;
+}
+
+interface ClientMaximizeSignal {
+  connect: (cb: (client: Client, h: boolean, v: boolean) => void) => void;
+  disconnect: (cb: (client: Client, h: boolean, v: boolean) => void) => void;
+}
+
+interface DesktopPresenceChangeSignal {
+  connect: (cb: (client: Client, desktop: number) => void) => void;
+  disconnect: (cb: (client: Client, desktop: number) => void) => void;
+}
+
+interface CurrentDesktopChangedSignal {
+  connect: (cb: (desktop: number, client: Client) => void) => void;
+  disconnect: (cb: (desktop: number, client: Client) => void) => void;
+}
+
+interface ScreenResizedSignal {
+  connect: (cb: (screen: number) => void) => void;
+  disconnect: (cb: (screen: number) => void) => void;
+}
+
+interface ClientActivatedSignal {
+  connect: (cb: (client: Client) => void) => void;
+  disconnect: (cb: (client: Client) => void) => void;
+}
+
+interface NumberDesktopsChangedSignal {
+  connect: (cb: (previousDesktops: number) => void) => void;
+  disconnect: (cb: (previousDesktops: number) => void) => void;
+}
+
+interface NumberScreensChangedSignal {
+  connect: (cb: (count: number) => void) => void;
+  disconnect: (cb: (count: number) => void) => void;
+}
+
+interface Workspace {
+  activeClient: Client;
+
+  readonly activeScreen: number;
+  readonly numScreens: number;
+
+  desktops: number;
+  currentDesktop: number;
+
+  readonly currentActivity: string;
+
+  clientList: () => Array<Client>;
+  clientArea: {
+    (type: number, client: Client): Geometry;
+    (type: number, screenId: number, desktopId: number): Geometry;
+  };
+
+  clientAdded: ClientSignal;
+  clientRemoved: ClientSignal;
+  clientUnminimized: ClientSignal;
+  clientMinimized: ClientSignal;
+  clientMaximizeSet: ClientMaximizeSignal;
+  clientFullScreenSet: ClientFullScreenSignal;
+  clientActivated: ClientActivatedSignal;
+  currentDesktopChanged: CurrentDesktopChangedSignal;
+  desktopPresenceChanged: DesktopPresenceChangeSignal;
+  screenResized: ScreenResizedSignal;
+  numberDesktopsChanged: NumberDesktopsChangedSignal;
+  numberScreensChanged: NumberScreensChangedSignal;
+}
+
+/******************************************************************************/
 
 declare const KWin: any;
 declare const workspace: Workspace;
@@ -7,11 +146,13 @@ declare function registerShortcut(
   label: string,
   shortcut: string,
   action: () => void
-);
+): void;
+
+/******************************************************************************/
 
 function newSlotPosition(
   workspace: Workspace,
-  client,
+  client: Client,
   numberXslots: number,
   numberYslots: number,
   x: number,
@@ -35,7 +176,13 @@ function newSlotPosition(
   return [newX, newY, width * xSlotToFill, height * ySlotToFill];
 }
 
-function reposition(client, newX, newY, w, h) {
+function reposition(
+  client: Client,
+  newX: number,
+  newY: number,
+  w: number,
+  h: number
+) {
   client.geometry = {
     x: newX,
     y: newY,
@@ -45,13 +192,13 @@ function reposition(client, newX, newY, w, h) {
 }
 
 function move(
-  workspace,
-  numberXslots,
-  numberYslots,
-  x,
-  y,
-  xSlotToFill,
-  ySlotToFill
+  workspace: Workspace,
+  numberXslots: number,
+  numberYslots: number,
+  x: number,
+  y: number,
+  xSlotToFill: number,
+  ySlotToFill: number
 ) {
   const client = workspace.activeClient;
   if (client.moveable) {
@@ -73,7 +220,7 @@ function move(
   }
 }
 
-function center(workspace) {
+function center(workspace: Workspace) {
   const client = workspace.activeClient;
   if (client.moveable) {
     const maxArea = workspace.clientArea(KWin.MaximizeArea, client);
