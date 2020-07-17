@@ -8,23 +8,19 @@ function newSlotPosition(
   xSlotToFill,
   ySlotToFill
 ) {
-  var maxArea = workspace.clientArea(KWin.MaximizeArea, client);
-  var width;
-  if (x == numberXslots) {
-    width = Math.floor(maxArea.width / numberXslots);
-  } else {
-    width = Math.ceil(maxArea.width / numberXslots);
-  }
+  const maxArea = workspace.clientArea(KWin.MaximizeArea, client);
+  const width =
+    x == numberXslots
+      ? Math.floor(maxArea.width / numberXslots)
+      : Math.ceil(maxArea.width / numberXslots);
 
-  var height;
-  if (y == numberYslots) {
-    height = Math.floor(maxArea.height / numberYslots);
-  } else {
-    height = Math.ceil(maxArea.height / numberYslots);
-  }
+  const height =
+    y == numberYslots
+      ? Math.floor(maxArea.height / numberYslots)
+      : Math.ceil(maxArea.height / numberYslots);
 
-  var newX = maxArea.x + width * x;
-  var newY = maxArea.y + height * y;
+  const newX = maxArea.x + width * x;
+  const newY = maxArea.y + height * y;
   return [newX, newY, width * xSlotToFill, height * ySlotToFill];
 }
 
@@ -46,9 +42,9 @@ function move(
   xSlotToFill,
   ySlotToFill
 ) {
-  var client = workspace.activeClient;
+  const client = workspace.activeClient;
   if (client.moveable) {
-    arr = newSlotPosition(
+    const arr = newSlotPosition(
       workspace,
       client,
       numberXslots,
@@ -58,7 +54,7 @@ function move(
       xSlotToFill,
       ySlotToFill
     );
-    var newX = arr[0],
+    const newX = arr[0],
       newY = arr[1],
       w = arr[2],
       h = arr[3];
@@ -67,20 +63,20 @@ function move(
 }
 
 function center(workspace) {
-  var client = workspace.activeClient;
+  const client = workspace.activeClient;
   if (client.moveable) {
-    var maxArea = workspace.clientArea(KWin.MaximizeArea, client);
-    var newX = maxArea.x + (maxArea.width - client.width) / 2;
-    var newY = maxArea.y + (maxArea.height - client.height) / 2;
+    const maxArea = workspace.clientArea(KWin.MaximizeArea, client);
+    const newX = maxArea.x + (maxArea.width - client.width) / 2;
+    const newY = maxArea.y + (maxArea.height - client.height) / 2;
     reposition(client, newX, newY, client.width, client.height);
   }
 }
 
 // function isInPosition(workspace, numberXslots, numberYslots, x, y, xSlotToFill, ySlotToFill) {
-//     var client = workspace.activeClient;
+//     const client = workspace.activeClient;
 //     if (client.moveable) {
 //         arr = getPosition(workspace, client, numberXslots, numberYslots, x, y, xSlotToFill, ySlotToFill);
-//         var newX = arr[0],
+//         const newX = arr[0],
 //             newY = arr[1],
 //             w = arr[2],
 //             h = arr[3];
