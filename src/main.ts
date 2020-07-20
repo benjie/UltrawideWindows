@@ -178,16 +178,16 @@ function newSlotPosition(
 
 function reposition(
   client: Client,
-  newX: number,
-  newY: number,
-  w: number,
-  h: number
+  x: number,
+  y: number,
+  width: number,
+  height: number
 ) {
   client.geometry = {
-    x: newX,
-    y: newY,
-    width: w,
-    height: h,
+    x,
+    y,
+    width,
+    height,
   };
 }
 

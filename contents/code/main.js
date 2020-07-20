@@ -11,12 +11,12 @@ function newSlotPosition(workspace, client, numberXslots, numberYslots, x, y, xS
     var newY = maxArea.y + height * y;
     return [newX, newY, width * xSlotToFill, height * ySlotToFill];
 }
-function reposition(client, newX, newY, w, h) {
+function reposition(client, x, y, width, height) {
     client.geometry = {
-        x: newX,
-        y: newY,
-        width: w,
-        height: h
+        x: x,
+        y: y,
+        width: width,
+        height: height
     };
 }
 function move(workspace, numberXslots, numberYslots, x, y, xSlotToFill, ySlotToFill) {
