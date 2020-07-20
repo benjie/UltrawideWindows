@@ -212,10 +212,7 @@ function move(
       xSlotToFill,
       ySlotToFill
     );
-    const newX = arr[0],
-      newY = arr[1],
-      w = arr[2],
-      h = arr[3];
+    const [newX, newY, w, h] = arr;
     reposition(client, newX, newY, w, h);
   }
 }
